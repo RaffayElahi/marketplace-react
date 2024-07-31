@@ -12,8 +12,7 @@ function SingleProduct({className, name, mainImage, price, variants, productCode
     return uniqueColors.map(v=> v.toLowerCase())
   }
   const reqColors = getUniqueColors(variants)
-  const [choosedColor, setChoosedColor] = useState(reqColors[0])
-  console.log(reqColors)
+
   return (
     
       <div className={`w-full border-r border-l border-b border-black p-5 first:border-r-0 odd:border-r-0 odd:border-l-0 last:border-r-0 ${className}`}>

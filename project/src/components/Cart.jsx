@@ -1,14 +1,30 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { Button } from "@/src/libs/ui/button";
 import { Sheet, SheetClose, SheetContent, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from "@/src/libs/ui/sheet";
 import { MyContext } from '../context/context';
 import Carticon from './Carticon';
 import { useNavigate } from 'react-router-dom';
+import { useToast } from "@/src/libs/ui/use-toast";
+
 
 function Cart({ header, product, Usersize, selectedColor, filterFunction }) {
-  const { cart, addToCart, removeItem, updateQuantity, cost } = useContext(MyContext);
+  const { toast } = useToast();
+  const { cart, addToCart, removeItem, updateQuantity, cost, errors, setError } = useContext(MyContext);
   const navigate = useNavigate() 
-  
+
+
+  useEffect(() => {
+    if (errors.length > 0) {
+        toast({
+          title: "Not Enough Products in inventory",
+          description: `${errors[0]}`,
+          variant: "destructive"
+        }); 
+        setError([]); 
+      }
+    
+  }, [errors, toast]);
+
   const handler = () => {
     
     console.log(filterFunction(product, selectedColor, Usersize))

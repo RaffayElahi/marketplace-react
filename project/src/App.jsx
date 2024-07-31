@@ -23,6 +23,8 @@ import VerifyEmail from "./pages/VerifyEmail"
 import VerifyEmailToken from './pages/VerifyEmailToken';
 import RequireAuth from './components/RequireAuth';
 import PresistantLogin from './components/PresistantLogin';
+import Success from './pages/Success';
+import Cancel from './pages/Cancel';
 
 
 
@@ -56,6 +58,9 @@ const App = () => {
                 <Route element={<RequireAuth allowedRoles={['user']}/>}>
                   <Route path='/cart' element={<CartPage/>}/>
                 </Route>
+                <Route element={<RequireAuth allowedRoles={['user']}/>}></Route>
+                  <Route path='/success' element={<Success/>}/>
+                  <Route path='/cancel' element={<Cancel/>}/>
                 <Route path='/verify-email' element={<VerifyEmail/>}/>
                 <Route path='/verify-email/:token' element={<VerifyEmailToken/>}/>
               </Route>

@@ -5,11 +5,11 @@ import Footer from './components/Footer';
 
 function Layout() {
   return (
-    <>
+    <div className='grid grid-rows-[1fr_2fr_1fr] h-full w-full'>
       <Header />
       <Outlet />    
       <Footer />
-    </>
+    </div>
   );
 }
 

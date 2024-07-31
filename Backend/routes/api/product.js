@@ -60,20 +60,16 @@ router.post('/upload', upload.fields([
 
 const getProductAndVariant = async (productCode, variantId) => {
   try {
-    // Find the product by productCode and exclude the variants property
     const product = await Product.findOne(
       { productCode },
-       // Projection to exclude the variants field
     ).exec();
 
     if (!product) {
       throw new Error('Product not found');
     }
 
-    // Find the specific variant by variantId within the variants array
     const variant = product.variants;
 
-    // Return the product and the variant
     return {
       product,
       variant,
@@ -162,17 +158,16 @@ router.get('/validate-cart', async (req, res) => {
       // Check if the requested quantity is available
       if (requestedQuantity > variant.quantity) {
         validationResult.errors.push(`Requested quantity for variant ${variantId} exceeds available quantity for product ${productCode}. Item removed from cart.`);
-        continue; // Skip this item
+        continue; 
       }
       if (requestedQuantity <= 0){
         continue;
       }
 
-      // Calculate the cost for the variant
       const variantTotalCost = variant.price * requestedQuantity;
       totalCost += variantTotalCost;
 
-      // Add validated item to the response
+
       validatedCart.push([
         variantId,
         productCode,

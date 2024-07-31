@@ -44,6 +44,10 @@ const MyProvider = ({ children }) => {
     refetch(); 
   }, [cart, refetch]);
 
+  const deleteCart = () =>{
+    setCart([])
+  }
+
   const addToCart = (product) => {
     setCart((prevCart) => {
       const productExists = prevCart.some((item) => item[0] === product.id);
@@ -72,7 +76,7 @@ const MyProvider = ({ children }) => {
   };
 
   return (
-    <MyContext.Provider value={{ cart, addToCart, removeItem, updateQuantity, cost, auth, setAuth, errors, signupData, setSignupData}}>
+    <MyContext.Provider value={{ cart, addToCart, removeItem, updateQuantity, cost, auth, setAuth,setError, errors, signupData, setSignupData, deleteCart}}>
       {children}
     </MyContext.Provider>
   );
