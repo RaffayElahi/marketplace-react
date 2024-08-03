@@ -1,64 +1,10 @@
 require('dotenv').config()
 const express = require('express');
-const multer = require('multer');
 const Product = require("../../model/Product.model")
 const router = express.Router();
-const path = require("path")
 
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, path.join(__dirname, '..','..','..','project/public/upload/'));
-  },
-  filename: function (req, file, cb) {
-    cb(null, `${Date.now()}-${file.originalname}`);
-  },
-});
-
-const upload = multer({ storage: storage });
-
-router.post('/upload', upload.fields([
-  { name: 'mainImage', maxCount: 1 },
-  { name: 'carouselImages', maxCount: 10 }
-]), async (req, res) => {
-  try {
-    const { name, fabricInformation, description, category, status } = req.body;
-    const variants = JSON.parse(req.body.variants || '[]'); // Parse variants from JSON
-
-    // Log values to debug
-    console.log('Received data:', { name, fabricInformation, description, category, status, variants });
-    
-    if (!fabricInformation) {
-      throw new Error('Fabric Information is required');
-    }
-
-    const product = new Product({
-      name,
-      fabricInformation,
-      description,
-      category,
-      status,
-      mainImage: req.files.mainImage ? req.files.mainImage[0].filename : null,
-      carouselImages: req.files.carouselImages ? req.files.carouselImages.map(file => ({
-        name: file.filename,
-      })) : [],
-      variants: variants.map(variant => ({
-        color: variant.color,
-        quantity: parseInt(variant.quantity, 10),
-        price: parseFloat(variant.price),
-        size: variant.size
-      }))
-    });
-
-    await product.save();
-    res.status(201).json(product);
-  } catch (err) {
-    console.error(err);
-    res.status(400).json({ error: err.message });
-  }
-});
-
-const getProductAndVariant = async (productCode, variantId) => {
+const getProductAndVariant = async (productCode) => {
   try {
     const product = await Product.findOne(
       { productCode },
@@ -112,6 +58,37 @@ router.get('/', async (req, res) => {
     }
 });
 
+router.get('/random', async (req, res) => {
+  const { productCode } = req.query;
+
+  try {
+    const product = await Product.findOne(
+      { productCode },
+    ).exec();
+
+    if (!product) {
+      throw new Error('Product not found');
+    }
+    if (!productCode) {
+      return res.status(400).json({ message: 'Product code is required' });
+    }
+
+    const products = await Product.find({ productCode: { $ne: productCode } }).exec();
+
+    if (products.length < 4) {
+      return res.status(404).json({ message: 'Not enough products available' });
+    }
+
+    const shuffledProducts = products.sort(() => 0.5 - Math.random());
+    const selectedProducts = shuffledProducts.slice(0, 4);
+
+    res.json(selectedProducts);
+  } catch (error) {
+    console.error('Error fetching products:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
 router.get('/search', async (req, res) => {
   const {productCode} = req.query
     try {
@@ -132,7 +109,6 @@ router.get('/validate-cart', async (req, res) => {
   let validatedCart = [];
   let validationResult = { isValid: true, errors: [] };
 
-  // Filter out null, undefined, or empty arrays from cart
   const cleanedCart = cart.filter(item => {
     return Array.isArray(item) && item.length === 3 && item.every(el => el !== null && el !== undefined);
   });
@@ -141,21 +117,18 @@ router.get('/validate-cart', async (req, res) => {
     const [variantId, productCode, requestedQuantity] = item;
 
     try {
-      // Find the product by productCode
       const product = await Product.findOne({ productCode }).exec();
       if (!product) {
         item.push(`Product with code ${productCode} not found. Item removed from cart.`);
-        continue; // Skip this item
+        continue; 
       }
 
-      // Find the variant by variantId
       const variant = product.variants.find(v => v.id === variantId);
       if (!variant) {
         validationResult.errors.push(`Variant with ID ${variantId} not found for product ${productCode}. Item removed from cart.`);
-        continue; // Skip this item
+        continue; 
       }
 
-      // Check if the requested quantity is available
       if (requestedQuantity > variant.quantity) {
         validationResult.errors.push(`Requested quantity for variant ${variantId} exceeds available quantity for product ${productCode}. Item removed from cart.`);
         continue; 
@@ -179,10 +152,8 @@ router.get('/validate-cart', async (req, res) => {
     }
   }
 
-  // Determine if the validation was successful based on the errors
   validationResult.isValid = validationResult.errors.length === 0;
   res.json({ validationResult, totalCost, validatedCart });
-
 
 });
 

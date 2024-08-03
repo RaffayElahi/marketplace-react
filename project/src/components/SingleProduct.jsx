@@ -15,21 +15,21 @@ function SingleProduct({className, name, mainImage, price, variants, productCode
 
   return (
     
-      <div className={`w-full border-r border-l border-b border-black p-5 first:border-r-0 odd:border-r-0 odd:border-l-0 last:border-r-0 ${className}`}>
+      <div className={`w-full  lg:border-r lg:border-l lg:border-b-0 border-black p-5 first:border-r-0 odd:border-r-0 odd:border-l-0 last:border-r-0 ${className}`}>
         <Link to={`/products/${productCode}`}>
-            <div className='h-4/5 w-full '>
+            <div className='h-auto w-full '>
                 <img src={`/upload/${mainImage}`}/>
             </div>
-            <div className='flex flex-col mt-2 gap-1'>
+            <div className='flex flex-col mt-2 gap-5 lg:gap-1'>
                 <div className='w-full flex justify-between'>
-                    <span className='uppercase text-sm text-left'>Marketplace</span>
-                    <span className='uppercase text-base text-right font-base'>{`$${price}`}</span>
+                    <span className='uppercase text-xl tracking-wide lg:text-sm text-left'>Marketplace</span>
+                    <span className='uppercase text-xl lg:text-base text-right font-base'>{`$${price}`}</span>
                 </div>
                 <div>
-                  <p className='text-xl'>{name}</p>
+                  <p className='text-3xl lg:text-xl'>{name}</p>
                   <br/>
                   <div className='w-full flex gap-2'>
-                    <span className='uppercase text-sm text-left'>Colors: </span>
+                    <span className='uppercase text-xl lg:text-sm text-left'>Colors: </span>
                     <TooltipProvider>
                     {
                       reqColors.map((color, index) => (

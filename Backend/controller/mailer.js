@@ -22,7 +22,7 @@ const verifyMail = (mail, token) =>{
             <a href="${url}">Verify email</a>`
     })
 
-    console.log(`email sent to ${url}`)
+    console.log(`Email sent to ${mail}.`)
 }
 
 module.exports = verifyMail

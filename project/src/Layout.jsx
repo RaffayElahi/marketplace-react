@@ -1,15 +1,25 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { Outlet } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
 
 function Layout() {
+  useEffect(() => {
+    const handleResize = () => {
+      window.location.reload();
+    };
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+  
   return (
-    <div className='grid grid-rows-[1fr_2fr_1fr] h-full w-full'>
+    <>
       <Header />
       <Outlet />    
       <Footer />
-    </div>
+    </>
   );
 }
 

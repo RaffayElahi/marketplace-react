@@ -13,7 +13,7 @@ const FileUploadButton = ({ id, name, onChange, multiple, ...props }) => {
     const files = event.target.files;
 
     console.log(files)
-    console.log(name)// Passes the name and files to the parent component's onChange handler
+    console.log(name)
   };
 
   return (

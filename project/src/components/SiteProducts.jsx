@@ -2,25 +2,35 @@ import React from 'react'
 import SingleProduct from './SingleProduct'
 import axiosConfig from '../lib/axiosConfig'
 import { useQuery } from 'react-query'
-function SiteProducts() {
+import ProductRow from './Loaders/ProductRow'
+import Error from './Error'
+
+function SiteProducts({productCode}) {
   const fetchProducts = async () => {
-    const { data } = await axiosConfig.get('/api/product/home');
-    console.log(data)
+    const { data } = await axiosConfig.get('/api/product/random', {
+      params: {productCode}
+    });
+
     return data;
   };
   const { data, error, isLoading } = useQuery('products', fetchProducts, {
     staleTime: 10 * 60 * 1000,
   });
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>An error occurred: {error.message}</div>;
-  console.log(data)
+  if (isLoading) return <ProductRow/>;
+  if (error) return <Error errorMessage={error.message}/>;
+
   return (
-    <div className='grid grid-cols-4 h-auto w-full border-b border-black auto-rows-[850px] px-5  '>
+    <div className='flex flex-col lg:grid lg:grid-cols-4 h-auto w-full border-b  border-black auto-rows-auto px-5  '>
       {
-        data.map(product => (
-          <SingleProduct name={product.name} mainImage={product.mainImage}
-            price={product.variants[0].price} variants={product.variants}
-            productCode={product.productCode} className='border-b-0'
+        data.slice(0, 4).map(product => (
+          <SingleProduct
+            key={product.productCode} 
+            name={product.name}
+            mainImage={product.mainImage}
+            price={product.variants[0].price}
+            variants={product.variants}
+            productCode={product.productCode}
+            className='border-b-0'
           />
         ))
       }

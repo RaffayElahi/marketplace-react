@@ -2,6 +2,7 @@ import React,{useContext} from 'react';
 import axiosConfig from '../lib/axiosConfig'
 import { useQuery } from 'react-query';
 import { MyContext } from '../context/context'
+import CarticonLoader from './Loaders/CarticonLoader'
 
 const fetchProductAndVariant = async (productCode, variantId) => {
   const response = await axiosConfig.get(`/api/product/product/${productCode}/variant/${variantId}`);
@@ -10,7 +11,6 @@ const fetchProductAndVariant = async (productCode, variantId) => {
 
 function Carticon({ item, num, removeItem, updateQuantity }) {
   const {cart} = useContext(MyContext)
-  console.log(item)
   const { data, error, isLoading } = useQuery(
     ['productAndVariant', item[1], item[0]],
     () => fetchProductAndVariant(item[1], item[0]),
@@ -23,11 +23,11 @@ function Carticon({ item, num, removeItem, updateQuantity }) {
   );
   
 
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error.message}</div>;
-  console.log(data)
+  if (isLoading) return <CarticonLoader/>;
+  if (error) return <div className='flex flex-col p-5 gap-2 border-b'><h2 className='text-xl font-semibold uppercase'>Error</h2><p className='text-base'>{error.message}</p></div>;
+
   const varaint = data.variant.filter(va => va._id === item[0])
-  console.log(varaint)
+
   const increaseQuantity = () => {
     updateQuantity(cart[num][0], cart[num][2]+1);
   };
@@ -37,10 +37,10 @@ function Carticon({ item, num, removeItem, updateQuantity }) {
     updateQuantity(cart[num][0], cart[num][2]-1);
     
   };
-  console.log(num)
+
   return (
-    <div className='flex w-full h-[250px] py-3 gap-5 pr-8 border-b border-gray-300'>
-      <div className='w-[40%] h-full'>
+    <div className='flex w-full md:h-[250px] py-3 gap-5 lg:pr-8 border-b border-gray-300'>
+      <div className='w-[60%] md:w-[50%] h-[70%] md:h-full'>
         <img src={`/upload/${data.product.mainImage}`} className='w-full h-full object-cover'/>
       </div>
       <div className='flex flex-col w-[60%] h-full gap-3'>

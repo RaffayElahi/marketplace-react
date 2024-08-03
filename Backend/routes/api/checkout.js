@@ -3,6 +3,7 @@ const express = require('express');
 const router = express.Router();
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const Product = require('../../model/Product.model')
+const verifyRoles = require('../../middleware/verifyRoles')
 
 const enrichProductData = async (productArray) => {
   const enrichedData = [];
@@ -70,7 +71,7 @@ const enrichProductData = async (productArray) => {
 
 
 
-router.post('/', async (req, res) => {
+router.post('/',verifyRoles('user') , async (req, res) => {
   if (!req.body.products || req.body.products.length === 0) {
     return res.status(400).send({
       error: 'No products provided.'
@@ -113,7 +114,7 @@ router.post('/', async (req, res) => {
   })
 });
 
-router.get('/session-status', async (req, res) => {
+router.get('/session-status', verifyRoles('user') ,async (req, res) => {
   const sessionId = req.cookies.stripeSessionId;
   if (!sessionId) {
     return res.status(404).send({

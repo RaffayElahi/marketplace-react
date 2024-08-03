@@ -7,22 +7,21 @@ const generateAccessToken = (user) => {
     return jwt.sign(
         { id: user._id, email: user.email, roles: user.role },
         process.env.JWT_ACCESS_TOKEN,
-        { expiresIn: '1h' }
+        { expiresIn: '1m' }
     );
 };
 
 router.post('/', async (req, res) => {
 
     const cookies = req.cookies;
-    if (!cookies?.refreshToken) return res.sendStatus(401); // No token
+    if (!cookies?.refreshToken) return res.sendStatus(401); 
 
     const refreshToken = cookies.refreshToken;
     try {
         const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_TOKEN);
         const foundUser = await User.findOne({ _id: decoded.id }).exec();
-        console.log(foundUser)
         if (!foundUser || foundUser.refreshToken !== refreshToken) {
-            return res.sendStatus(403); // Forbidden
+            return res.sendStatus(403); 
         }
 
         const newAccessToken = generateAccessToken(foundUser);
@@ -30,7 +29,7 @@ router.post('/', async (req, res) => {
             accessToken: newAccessToken,
             roles: foundUser.role,
             id: foundUser._id,
-            name: foundUser.name,
+            username: foundUser.username,
         });
     } catch (err) {
         res.sendStatus(403);

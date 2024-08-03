@@ -18,15 +18,14 @@ const MyProvider = ({ children }) => {
   const [signupData, setSignupData] = useState(null)
   const [errors, setError] = useState([])
   const [cost, setCost] = useState()
+  const [isLoading, setIsLoading] = useState(true)
 
   const { data: cartData, refetch } = useQuery(['cartData', cart], () => fetchCartData(cart), {
     enabled: !!cart.length,
     refetchOnWindowFocus: false,
     staleTime: 1000 * 60 * 5,
   });
-  useEffect(()=>{
-    console.log(auth)
-  }, [auth])
+  
   useEffect(() => {
     if (cartData) {
       setCart(cartData.validatedCart)
@@ -34,7 +33,6 @@ const MyProvider = ({ children }) => {
 
       if (!cartData.validationResult.isValid){
         setError(cartData.validationResult.errors)
-        console.log(errors)
     }}
 
   }, [cartData, cart]);
@@ -76,7 +74,7 @@ const MyProvider = ({ children }) => {
   };
 
   return (
-    <MyContext.Provider value={{ cart, addToCart, removeItem, updateQuantity, cost, auth, setAuth,setError, errors, signupData, setSignupData, deleteCart}}>
+    <MyContext.Provider value={{ cart,setCart, addToCart, removeItem, updateQuantity, cost, auth, setAuth,setError, errors, signupData, setSignupData, deleteCart, isLoading, setIsLoading}}>
       {children}
     </MyContext.Provider>
   );

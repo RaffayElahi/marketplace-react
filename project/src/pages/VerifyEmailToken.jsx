@@ -4,6 +4,8 @@ import { useParams } from "react-router-dom";
 import axiosConfig from "../lib/axiosConfig";
 import VerifyMailSuccess from "../components/VerifyMailSuccess";
 import VerifyDenied from "../components/VerifyDenied";
+import EmailLoader from '../components/Loaders/EmailLoader'
+import Error from '../components/Error'
 
 export default function VerifyEmailToken() {
     const { token } = useParams();
@@ -15,12 +17,13 @@ export default function VerifyEmailToken() {
             .then(res => res.data),
         {
             onError: () => setDenied(true),
+            refetchOnWindowFocus: false,
             onSuccess: () => setDenied(false)
         }
     );
 
-    if (isLoading) return <div>Loading...</div>;
-    if (error) return <div>Error: {error.message}</div>;
+    if (isLoading) return <EmailLoader/>;
+    if (error) return <Error errorMessage={error.message}/>;
 
     return (
         denied ? <VerifyDenied /> : <VerifyMailSuccess email={data.email}/>

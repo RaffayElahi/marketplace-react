@@ -5,7 +5,7 @@ import SuggestedProducts from '../components/SuggestedProducts';
 import axiosConfig from '../lib/axiosConfig';
 import NotFound from './NotFound';
 import { useQuery } from 'react-query';
-
+import ProductDetailCoverLoader from '../components/Loaders/ProductDetailCoverLoader';
 
 const fetchProduct = async (productCode) => {
   try {
@@ -33,15 +33,13 @@ function ProductDetail() {
     }
   );
 
-  
-
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <ProductDetailCoverLoader/>;
   if (error?.message === 'Product not found') return <NotFound />;
   if (error) return <div>An error occurred: {error.message}</div>;
 
   return (
     <>
-      <ProductDetailCover productCode={productCode}/><SuggestedProducts />
+      <ProductDetailCover productCode={productCode}/><SuggestedProducts productCode={productCode}/>
     </>
   );
 }

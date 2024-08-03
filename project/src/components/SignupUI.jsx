@@ -8,40 +8,45 @@ import { Input } from '@/src/libs/ui/input';
 import { Label } from '@/src/libs/ui/label';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-import axiosConfig from '../lib/axiosConfig'
+import axiosConfig from '../lib/axiosConfig';
 import { useMutation } from 'react-query';
-
+import { useToast } from "@/src/libs/ui/use-toast";
 
 export default function SignupUI() {
+  const { toast } = useToast();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [message, setMessage] = useState(''); // State for success/error messages
   const [messageType, setMessageType] = useState(''); // 'success' or 'error'
-  const navigate = useNavigate()
-  const mutation = useMutation(data => {
-    return axiosConfig.post('/api/auth/signup', data);
-  }, {
-    onSuccess: (data) => {
-        reset()
-        console.log('Signup successful:', data);
-        navigate('/verify-email')
-    },
-    onError: (error) => {
-        reset()
-        setMessageType('error')
-        setMessage(error.response.data.message)
-        console.error('Signup error:', error);
-    }
-  });
+  const navigate = useNavigate();
 
-  
+  const mutation = useMutation(
+    (data) => axiosConfig.post('/api/auth/signup', data),
+    {
+      onSuccess: (data) => {
+        toast({
+          title: "Account created",
+          description: "Your account has been created. Please verify your email before proceeding.",
+          variant: "default",
+        });
+        reset();
+        navigate('/verify-email');
+      },
+      onError: (error) => {
+        reset();
+        setMessageType('error');
+        setMessage(error.response?.data?.message || error.message);
+      },
+    }
+  );
+
   const { register, handleSubmit, formState: { errors }, reset } = useForm({
-    resolver: zodResolver(SignupSchema)
+    resolver: zodResolver(SignupSchema),
   });
 
   const onSubmit = async (data) => {
     mutation.mutate(data);
-};
+  };
 
   const handleTogglePassword = () => {
     setShowPassword((prev) => !prev);
@@ -52,28 +57,28 @@ export default function SignupUI() {
   };
 
   return (
-    <div className="w-full flex flex-col h-[90vh] lg:grid lg:h-[90vh] lg:grid-cols-2">
-      <div className="flex h-full items-center justify-center py-12">
-        <div className="mx-auto grid w-[350px] gap-6">
-          <div className="grid gap-2 text-center">
-            <h1 className="text-3xl font-bold">Signup</h1>
-            <p className="text-balance text-muted-foreground">
+    <div className="flex flex-col lg:grid lg:grid-cols-2 lg:gap-8 w-full h-auto lg:h-[90vh] overflow-hidden">
+      <div className="flex flex-col items-center justify-center py-8 lg:h-full lg:py-12 px-4 lg:px-8 lg:max-w-screen-lg mx-auto">
+        <div className="max-w-md w-full mx-auto">
+          <div className="text-center mb-6">
+            <h1 className="text-2xl lg:text-3xl font-bold">Signup</h1>
+            <p className="text-sm lg:text-base text-muted-foreground mt-2">
               Create a new account by filling in the details below.
             </p>
           </div>
-          <form onSubmit={handleSubmit(onSubmit)} className="grid gap-4">
-            <div className="grid gap-2">
-              <Label htmlFor="name">Name</Label>
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            <div>
+              <Label htmlFor="username">Username</Label>
               <Input
-                id="name"
+                id="username"
                 type="text"
                 placeholder="John Doe"
-                {...register('name')}
-                error={!!errors.name}
+                {...register('username')}
+                error={!!errors.username}
               />
-              {errors.name && <p className="text-red-500 text-sm">{errors.name.message}</p>}
+              {errors.username && <p className="text-red-500 text-sm mt-1">{errors.username.message}</p>}
             </div>
-            <div className="grid gap-2">
+            <div>
               <Label htmlFor="email">Email</Label>
               <Input
                 id="email"
@@ -82,9 +87,9 @@ export default function SignupUI() {
                 {...register('email')}
                 error={!!errors.email}
               />
-              {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
+              {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>}
             </div>
-            <div className="grid gap-2">
+            <div>
               <Label htmlFor="password">Password</Label>
               <div className="relative">
                 <Input
@@ -102,9 +107,9 @@ export default function SignupUI() {
                   {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
                 </button>
               </div>
-              {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
+              {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>}
             </div>
-            <div className="grid gap-2">
+            <div>
               <Label htmlFor="confirmPassword">Confirm Password</Label>
               <div className="relative">
                 <Input
@@ -122,13 +127,13 @@ export default function SignupUI() {
                   {showConfirmPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
                 </button>
               </div>
-              {errors.confirmPassword && <p className="text-red-500 text-sm">{errors.confirmPassword.message}</p>}
+              {errors.confirmPassword && <p className="text-red-500 text-sm mt-1">{errors.confirmPassword.message}</p>}
             </div>
             <Button type="submit" className="w-full uppercase" disabled={mutation.isLoading}>
-              {(mutation.isLoading)? 'Signing up ...': 'Sign up'} 
+              {mutation.isLoading ? 'Signing up ...' : 'Sign up'}
             </Button>
             {message && (
-              <div className={`mt-4 text-center text-sm ${messageType === 'error' ? 'text-red-500' : 'text-green-500'}`}>
+              <div className={`mt-4 text-center text-base ${messageType === 'error' ? 'text-red-500' : 'text-green-500'}`}>
                 {message}
               </div>
             )}
@@ -141,12 +146,12 @@ export default function SignupUI() {
           </form>
         </div>
       </div>
-      
-      <div className="bg-muted h-[40vh] flex items-center justify-center border-t border-b border-black lg:h-[90vh] lg:border-t-0 lg:border-b-0 lg:border-l">
+
+      <div className="relative h-[50vh] overflow-hidden bg-muted border-b border-black lg:border-t-0 lg:border-b-0 lg:border-l lg:h-full">
         <img
           src="/signupimg.jpg"
           alt="Signup Background"
-          className="h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
+          className="absolute inset-0 h-full w-full object-cover"
         />
       </div>
     </div>

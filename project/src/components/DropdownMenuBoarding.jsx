@@ -17,7 +17,7 @@ export default function DropdownMenuBoarding() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="link" className='border-none'><h2 className="text-black text-xl">Filter</h2></Button>
+        <Button variant="link" className='border-none'><h2 className="text-black text-2xl font-normal lg:text-xl">Filter</h2></Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-60">
         <DropdownMenuLabel>Panel Position</DropdownMenuLabel>

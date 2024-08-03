@@ -11,7 +11,6 @@ import {
 
 import { Link } from 'react-router-dom'
 function ShowColor({color, index, selected, setSelected}) {
-  console.log((color===selected))
   return (
     <Tooltip >
             <TooltipTrigger asChild>

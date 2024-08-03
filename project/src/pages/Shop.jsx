@@ -1,16 +1,12 @@
-import React from 'react'
-import ShopAllHeader from '../components/ShopAllHeader'
-import AllProductList from '../components/AllProductList'
-import PaginationBoarding from '../components/PaginationBoarding'
+import React from "react";
+import AllProductList from "../components/AllProductList";
 
 function Shop() {
   return (
-    <div>
-      <ShopAllHeader/>
-      <AllProductList/>
-      
+    <div className="min-h-[80vh] grid grid-flow-dense">
+      <AllProductList />
     </div>
-  )
+  );
 }
 
-export default Shop
+export default Shop;

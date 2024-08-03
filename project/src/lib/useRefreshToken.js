@@ -8,16 +8,15 @@ const useRefreshToken = () => {
     const refresh = async () => {
         try {
             const response = await axiosConfig.post('/api/auth/refresh');
-            const { accessToken, roles, id, name } = response.data;
+            const { accessToken, roles, id, username } = response.data;
 
             setAuth(prev => ({
                 ...prev,
                 roles,
                 accessToken,
                 id,
-                name,
+                username,
             }));
-            console.log(auth)
             return accessToken;
         } catch (err) {
             console.error('Error refreshing token:', err);

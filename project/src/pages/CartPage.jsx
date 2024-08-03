@@ -1,11 +1,8 @@
-import React from 'react'
-import CartWrapper from '../components/CartWrapper'
+import React from "react";
+import CartWrapper from "../components/CartWrapper";
 
 function CartPage() {
-  return (
-
-      <CartWrapper/>
-  )
+  return <CartWrapper />;
 }
 
-export default CartPage
+export default CartPage;

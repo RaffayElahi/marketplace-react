@@ -10,16 +10,19 @@ const SignupController = async (req, res) => {
         return res.status(400).json({ errors: errors.array() });
     }
 
-    const { email, password, name } = req.body;
+    const { email, password, username } = req.body;
     const user = await User.findOne({ email }).exec();
     if (user) {
         return res.status(400).json({ message: "Email already exists. Login to your account." });
     }
-
+    const unique = await User.findOne({ username }).exec();
+    if (unique){
+        return res.status(400).json({ message : "Username already exists. Use a different username"})
+    }
     try {
         const hashedPassword = await bcrypt.hash(password, 11);
         const newUser = await User.create({
-            name,
+            username,
             password: hashedPassword,
             email
         });
@@ -28,7 +31,7 @@ const SignupController = async (req, res) => {
         res.cookie('verifyEmailToken', token, {
             httpOnly: true,
             secure: true, 
-            maxAge: 60 * 60 * 1000 // 1 hour
+            maxAge: 60 * 60 * 1000 
         });
         sendEmailVerification(email, token);
         res.status(200).json({ message: "Email has been sent to the mail." });

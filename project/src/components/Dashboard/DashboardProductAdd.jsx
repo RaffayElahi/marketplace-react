@@ -3,7 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState, useRef } from "react";
 import productSchema from "../../schemas/ProductSchema";
 import { Upload } from "lucide-react";
-import { DevTool } from "@hookform/devtools";
+import useAxiosPrivate from '../../lib/AxiosPrivate'
 
 import { ChevronLeft, PlusCircle } from "lucide-react";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
@@ -66,9 +66,8 @@ function DashboardProductEdit() {
     },
     shouldUnregister: true,
   });
-
+  const axiosPrivate = useAxiosPrivate();
   const onSubmit = async (data) => {
-    console.log(data);
     const formData = new FormData();
 
     formData.append("name", data.name);
@@ -92,8 +91,8 @@ function DashboardProductEdit() {
     formData.append("variants", JSON.stringify(data.variants));
 
     try {
-      const response = await axios.post(
-        "http://localhost:4000/api/product/upload",
+      const response = await axiosPrivate.post(
+        "http://localhost:4000/api/productadmin/upload",
         formData,
         {
           headers: {
@@ -102,7 +101,7 @@ function DashboardProductEdit() {
         }
       );
 
-      console.log("Response:", response.data);
+
       reset();
       setPreview(null)
       setPreviewTwo([])
@@ -469,7 +468,6 @@ function DashboardProductEdit() {
                                   <Select
                                     value={field.value}
                                     onValueChange={(value) => {
-                                      console.log("Selected value:", value);
                                       field.onChange(value);
                                     }}
                                   >

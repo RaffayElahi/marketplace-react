@@ -71,7 +71,7 @@ import {
     };
   
     return (
-      <Pagination>
+      <Pagination className='border-b border-black py-3 lg:border-b-0 '>
         <PaginationContent>
           <PaginationItem>
             <PaginationPrevious
