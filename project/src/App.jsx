@@ -1,5 +1,4 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Loader from './components/Loader';
 import './App.css';
 import Layout from './Layout';
 import Home from './pages/Home';
@@ -28,7 +27,7 @@ import Success from './pages/Success';
 import CAncel from './pages/CAncel';
 import NotFound from './pages/NotFound'
 import Unauthorized from './pages/Unauthorized'
-
+import EmailLoader from './components/Loaders/EmailLoader'
 
 
 const App = () => {
@@ -43,7 +42,7 @@ const App = () => {
   }, []);
 
   if (isLoading) {
-    return <Loader />;
+    return <EmailLoader />;
   }
 
   return (
