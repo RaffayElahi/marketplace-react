@@ -6,7 +6,8 @@ const cors = require('cors');
 const corsOptions = require('./controller/cors');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-const verifyJWT = require('./middleware/verifyJWT')
+const verifyJWT = require('./middleware/verifyJWT');
+const { securityMiddleware } = require('./middleware/rateLimiter');
 
 const server = express();
 require('dotenv').config();
@@ -20,6 +21,8 @@ server.use(express.static(path.join(__dirname, 'public')));
 
 server.use(cors(corsOptions));
 server.use(cookieParser());
+
+server.use(securityMiddleware);
 
 server.use('/api/auth', require('./routes/auth/signup'));
 server.use('/api/auth/verify-email', require('./routes/auth/verifyEmail'));

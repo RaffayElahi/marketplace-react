@@ -9,6 +9,7 @@ const UserSchema = new Schema({
         type: String,
         required: true,
         unique: true,
+        sparse: true,
         match: /^[A-Za-z0-9]+$/,
         maxlength: 28
     },

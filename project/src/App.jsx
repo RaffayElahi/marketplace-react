@@ -42,7 +42,7 @@ const App = () => {
   }, []);
 
   if (isLoading) {
-    return <EmailLoader />;
+    return <EmailLoader fullscreen={true}/>;
   }
 
   return (

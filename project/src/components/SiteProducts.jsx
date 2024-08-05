@@ -5,8 +5,12 @@ import { useQuery } from 'react-query'
 import ProductRow from './Loaders/ProductRow'
 import Error from './Error'
 
-function SiteProducts({productCode}) {
+function SiteProducts({productCode, main}) {
   const fetchProducts = async () => {
+    if (main) {
+      const {data} = await axiosConfig.get('/api/product/');
+      return data;
+    }
     const { data } = await axiosConfig.get('/api/product/random', {
       params: {productCode}
     });

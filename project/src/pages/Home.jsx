@@ -7,7 +7,7 @@ function Home() {
   return (
     <>
       <MainHomeSection/>
-      <SiteProducts/>
+      <SiteProducts main={true}/>
       <StaticHomeEnding/>
     </>
   )

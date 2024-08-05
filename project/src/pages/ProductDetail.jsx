@@ -6,6 +6,7 @@ import axiosConfig from '../lib/axiosConfig';
 import NotFound from './NotFound';
 import { useQuery } from 'react-query';
 import ProductDetailCoverLoader from '../components/Loaders/ProductDetailCoverLoader';
+import CartPageHeader from '../components/CartPageHeader'
 
 const fetchProduct = async (productCode) => {
   try {
@@ -39,7 +40,9 @@ function ProductDetail() {
 
   return (
     <>
-      <ProductDetailCover productCode={productCode}/><SuggestedProducts productCode={productCode}/>
+      <CartPageHeader/>
+      <ProductDetailCover productCode={productCode}/>
+      <SuggestedProducts productCode={productCode}/>
     </>
   );
 }
