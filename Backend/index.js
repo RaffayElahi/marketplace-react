@@ -12,34 +12,37 @@ const { securityMiddleware } = require('./middleware/rateLimiter');
 const server = express();
 require('dotenv').config();
 
+
+server.use(cors(corsOptions));
+
+// Middleware
 server.use(bodyParser.json());
 server.use(bodyParser.urlencoded({ extended: true }));
-
 server.use(express.json());
 server.use(express.urlencoded({ extended: false }));
 server.use(express.static(path.join(__dirname, 'public')));
-
-server.use(cors(corsOptions));
 server.use(cookieParser());
+
 
 server.use(securityMiddleware);
 
-server.get('/', (req, res)=>{
-    res.send('Hello')
-})
+// Apply routes
+server.get('/', (req, res) => {
+    res.send('Hello');
+});
 
 server.use('/api/auth', require('./routes/auth/signup'));
 server.use('/api/auth/verify-email', require('./routes/auth/verifyEmail'));
 server.use('/api/auth/refresh', require('./routes/auth/refresh'));
 server.use('/api/product', require('./routes/api/product'));
 
-server.use(verifyJWT)
+// Apply JWT verification middleware
+server.use(verifyJWT);
 
-server.use('/api/productadmin', require('./routes/api/productAdmin'))
-server.use('/api/checkout', require('./routes/api/checkout'))
+server.use('/api/productadmin', require('./routes/api/productAdmin'));
+server.use('/api/checkout', require('./routes/api/checkout'));
 
-server.options('*', cors(corsOptions))
-
+// Connect to MongoDB and start server
 mongoose.connect(process.env.MONGO_URL, {})
     .then(() => {
         console.log('MongoDB Connected...');
