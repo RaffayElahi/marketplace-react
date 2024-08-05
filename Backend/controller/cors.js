@@ -1,8 +1,8 @@
 const corsOptions = {
-  origin: process.env.FRONTEND_URL, 
-  credentials: true, // Allow credentials (cookies) to be sent
-  methods: 'GET,POST,PUT,DELETE,OPTIONS', // Allow these HTTP methods
-  allowedHeaders: 'Content-Type,Authorization', // Allow these headers
+  origin: 'https://marketplace-react-kappa.vercel.app/', 
+  credentials: true, 
+  methods: 'GET,POST,PUT,DELETE,OPTIONS', 
+  allowedHeaders: 'Content-Type,Authorization', 
   preflightContinue: false,
   optionsSuccessStatus: 204
 };
