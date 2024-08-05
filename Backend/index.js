@@ -24,6 +24,10 @@ server.use(cookieParser());
 
 server.use(securityMiddleware);
 
+server.get('/', (req, res)=>{
+    res.send('Hello')
+})
+
 server.use('/api/auth', require('./routes/auth/signup'));
 server.use('/api/auth/verify-email', require('./routes/auth/verifyEmail'));
 server.use('/api/auth/refresh', require('./routes/auth/refresh'));
