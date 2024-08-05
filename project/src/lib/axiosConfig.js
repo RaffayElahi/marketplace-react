@@ -1,10 +1,10 @@
 import axios from 'axios';
 
-const BASE_URL = 'https://marketplace-react-api.vercel.app/';
+const BASE_URL = 'https://marketplace-react-api.vercel.app';
 
 const axiosConfig = axios.create({
     baseURL: BASE_URL,
-    withCredentials: true, // Ensure cookies are sent with requests
+    withCredentials: true, 
     headers: {
         'Content-Type': 'application/json',
     },
@@ -12,7 +12,7 @@ const axiosConfig = axios.create({
 
 export const axiosPrivate = axios.create({
     baseURL: BASE_URL,
-    withCredentials: true, // Ensure cookies are sent with requests
+    withCredentials: true, 
     headers: { 'Content-Type': 'application/json' },
 });
 
