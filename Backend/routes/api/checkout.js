@@ -107,6 +107,7 @@ router.post('/',verifyRoles('user') , async (req, res) => {
   res.cookie('stripeSessionId', session.id, {
     httpOnly: true,
     secure: true,
+    sameSite: 'None',
     maxAge: 20 * 60 * 1000 * 5
   });
   res.json({

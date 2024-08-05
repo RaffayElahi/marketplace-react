@@ -40,6 +40,7 @@ const SignupController = async (req, res) => {
         res.cookie('verifyEmailToken', token, {
             httpOnly: true,
             secure: true, 
+            sameSite: 'None',
             maxAge: 60 * 60 * 1000 
         });
         sendEmailVerification(email, token);

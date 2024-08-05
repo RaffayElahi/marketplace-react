@@ -15,6 +15,7 @@ const verifyEmail = (req, res) =>{
         res.cookie('verifyEmailToken', '', {
             httpOnly: true,
             secure: true,
+            sameSite: 'None',
             expires: new Date(0)
         });
         res.status(200).json({message: "Email verified successfully", email: req.email})
