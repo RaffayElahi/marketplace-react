@@ -9,7 +9,7 @@ import EmailLoader from '../components/Loaders/EmailLoader';
 
 
 
-function CAncel() {
+export default function Cancel() {
   const axiosPrivate = useAxiosPrivate();
   const fetchData = async () => {
     const { data } = await axiosPrivate.get('/api/checkout/session-status'); 
@@ -58,5 +58,3 @@ function CAncel() {
     </div>
   );
 }
-
-export default CAncel;
