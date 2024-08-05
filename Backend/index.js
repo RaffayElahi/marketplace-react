@@ -13,7 +13,7 @@ const server = express();
 require('dotenv').config();
 
 
-server.use(cors(corsOptions));
+// server.use(cors(corsOptions));
 
 // Middleware
 server.use(bodyParser.json());
@@ -26,7 +26,7 @@ server.use(cookieParser());
 
 server.use(securityMiddleware);
 
-// Apply routes
+
 server.get('/', (req, res) => {
     res.send('Hello');
 });
