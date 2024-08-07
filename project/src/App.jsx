@@ -31,20 +31,6 @@ import EmailLoader from './components/Loaders/EmailLoader'
 
 
 const App = () => {
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 2000);
-
-    return () => clearTimeout(timer);
-  }, []);
-
-  if (isLoading) {
-    return <EmailLoader fullscreen={true}/>;
-  }
-
   return (
       <MyProvider>
         <Router>

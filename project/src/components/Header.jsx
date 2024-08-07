@@ -110,7 +110,7 @@ function Header() {
           <Link className='text-4xl  md:text-7xl uppercase' to='/' onClick={()=> setIsOpen(false)}>Home</Link>
           <Link className='text-4xl  md:text-7xl uppercase' to='/shop' onClick={()=> setIsOpen(false)}>Shop</Link>
           <Link className='text-4xl  md:text-7xl uppercase' to='/about' onClick={()=> setIsOpen(false)}>About</Link>
-          <Link className='text-4xl  md:text-7xl uppercase' to='/cart' onClick={()=> setIsOpen(false)}>Cart</Link>
+          {(auth.username)&&<Link className='text-xl' to='/cart' onClick={()=> setIsOpen(false)}>Cart</Link>}
         </div>
         <div className='h-1/3 w-full flex flex-col justify-end space-y-5'>
           {(auth.username)?
