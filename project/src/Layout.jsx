@@ -4,15 +4,7 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 
 function Layout() {
-  useEffect(() => {
-    const handleResize = () => {
-      window.location.reload();
-    };
-    window.addEventListener('resize', handleResize);
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
+  
   
   return (
     <>

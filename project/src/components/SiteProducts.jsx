@@ -1,4 +1,4 @@
-import React from 'react'
+import { useCallback } from 'react' 
 import SingleProduct from './SingleProduct'
 import axiosConfig from '../lib/axiosConfig'
 import { useQuery } from 'react-query'
@@ -6,20 +6,27 @@ import ProductRow from './Loaders/ProductRow'
 import Error from './Error'
 
 function SiteProducts({productCode, main}) {
-  const fetchProducts = async () => {
+  const fetchProducts = useCallback(async (productCode, main) => {
     if (main) {
-      const {data} = await axiosConfig.get('/api/product/');
+      const { data } = await axiosConfig.get('/api/product/');
       return data;
     }
     const { data } = await axiosConfig.get('/api/product/random', {
-      params: {productCode}
+      params: { productCode }
     });
-
+  
     return data;
-  };
-  const { data, error, isLoading } = useQuery('products', fetchProducts, {
-    staleTime: 10 * 60 * 1000,
-  });
+  }, []);
+  const { data, error, isLoading } = useQuery(
+    ['products', productCode, main], 
+    () => fetchProducts(productCode, main),
+    {
+      staleTime: 10 * 60 * 1000,
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
+      retry: false
+    }
+  );
   if (isLoading) return <ProductRow/>;
   if (error) return <Error errorMessage={error.message}/>;
 
